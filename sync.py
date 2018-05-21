@@ -32,7 +32,13 @@ while True:
 		repos.append(repo["full_name"])
 	print('Added',len(f.json()),'repos')
 
+a = False
 for repo in repos:
+	if (repo == 'gb-archive/ems-flasher2'):
+		a = True
+	if (a == False):
+		print('skipped')
+		continue
 	print('\nSyncing', repo)
 	# Get the upstream parent repository
 	url = API_endpoint + '/repos/' + repo
@@ -47,10 +53,19 @@ for repo in repos:
 			print('No parent or source repo found, skipping.')
 			continue
 	print('Found parent repository', parentRepo)
+
+	# Fetch upstream ref of last commit
 	url = API_endpoint + '/repos/' + parentRepo + '/git/refs/heads/master'
 	f = r.request('GET', url=url, auth=(cfg.credentials['user'], cfg.credentials['token']))
+	
+	if (f.status_code != 200):
+		print('Upstream repo not available')
+		continue
+
 	ref = f.json()['object']['sha']
 	print("Got upstream ref", ref)
+
+	# Fast-forward our repo
 	url = API_endpoint + '/repos/' + repo + '/git/refs/heads/master'
 	f = r.request('PATCH', url=url, data = json.dumps({'sha':ref}), auth=(cfg.credentials['user'], cfg.credentials['token']))
 	if (f.status_code == 200):
