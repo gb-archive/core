@@ -7,6 +7,8 @@ import configuration as cfg
 
 API_endpoint = 'https://api.github.com'
 
+## FORK
+
 # There's no (current) way to API authenticate as an organization. Authenticate as an user with enough rights in the organization and fork as the organization using this parameter
 params = {'organization':'gb-archive'}
 
@@ -17,8 +19,9 @@ reg = re.compile('github.com\/([a-zA-Z0-9-]*)\/([a-zA-Z0-9-]*)')
 m = re.findall(reg, reslist.text)
 print('Found',len(m),'repositories')
 
-# Skip the first match, the original awesome repo.
-for i in range (1, len(m)):
+# Fork each matched repo
+for i in range (0, len(m)):
+	# POST /repos/:owner/:repo/forks
 	url = API_endpoint + '/repos/' + m[i][0] + '/' + m[i][1] + '/forks'
 	print('Forking '+ m[i][0] + '/' + m[i][1])
 	print(url)
