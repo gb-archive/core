@@ -1,8 +1,15 @@
 # *The Game Boy Archive* Core
 
+The code that powers [*The Game Boy Archive*](https://github.com/gb-archive) project. Periodically mirrors Game Boy related software, hardware and literature. Keeps those forks synced to upstream and provides access to everything archived.
+
 ## Backend
 
-The code that powers [*The Game Boy Archive*](https://github.com/gb-archive) project. Periodically mirrors Game Boy related software, hardware and literature. Keeps those forks synced to upstream and provides access to everything archived.
+- **fork.py**. Forks everything linked in the awesome-gbdev repository which is a GitHub repository.
+- **sync.py**. Checks every fork in gb-archive. If has a parent, it syncs the repo to upstream with the last commits.
+
+## Frontend
+
+TODO
 
 ### Resources and documentation
 
