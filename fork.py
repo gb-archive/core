@@ -1,6 +1,7 @@
 import requests as r
 import re
 import time
+import itertools
 
 # configuration.py contains the authentication credentials. See configuration_example.py
 import configuration as cfg
@@ -9,15 +10,24 @@ API_endpoint = 'https://api.github.com'
 
 ## FORK
 
-# There's no (current) way to API authenticate as an organization. Authenticate as an user with enough rights in the organization and fork as the organization using this parameter
+# Authenticate as an user with enough rights in the organization and fork as the organization using this parameter
 params = {'organization':'gb-archive'}
 
-# Remote list of repositories links to fork
-reslist = r.request('get', 'https://raw.githubusercontent.com/avivace/awesome-gbdev/master/README.md')
-
+# List of repository sources
+sources = ['https://raw.githubusercontent.com/gbdev/awesome-gbdev/master/README.md', 'https://raw.githubusercontent.com/gbdev/awesome-gbdev/master/EMULATORS.md']
+m = []
 reg = re.compile('github.com\/([a-zA-Z0-9-]*)\/([a-zA-Z0-9-]*)')
-m = re.findall(reg, reslist.text)
-print('Found',len(m),'repositories')
+
+for source in sources:
+	# Compile a list of repositories links to fork
+	reslist = r.request('get', source)
+	m.append(re.findall(reg, reslist.text))
+
+
+# Flatten
+chain = itertools.chain.from_iterable(m)
+repoList = list(chain)
+print('Found',len(repoList),'repositories')
 
 # Fork each matched repo
 for i in range (0, len(m)):
@@ -27,5 +37,3 @@ for i in range (0, len(m)):
 	print(url)
 	f = r.request('post', url=url, params=params, auth=(cfg.credentials['user'], cfg.credentials['token']))
 	print(f.status_code)
-	# Forks happen asynchronously. Avoid instantly requesting hundreds of them.
-	time.sleep(0.5)
