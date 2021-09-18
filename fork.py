@@ -14,7 +14,9 @@ API_endpoint = 'https://api.github.com'
 params = {'organization':'gb-archive'}
 
 # List of repository sources
-sources = ['https://raw.githubusercontent.com/gbdev/awesome-gbdev/master/README.md', 'https://raw.githubusercontent.com/gbdev/awesome-gbdev/master/EMULATORS.md']
+sources = ['https://raw.githubusercontent.com/gbdev/awesome-gbdev/master/README.md',
+	   'https://raw.githubusercontent.com/gbdev/awesome-gbdev/master/EMULATORS.md',
+	   'https://gbdev.io/pandocs/single.html']
 m = []
 reg = re.compile('github.com\/([a-zA-Z0-9-]*)\/([a-zA-Z0-9-]*)')
 
