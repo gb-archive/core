@@ -31,11 +31,12 @@ chain = itertools.chain.from_iterable(m)
 repoList = list(chain)
 print('Found',len(repoList),'repositories')
 
+
 # Fork each matched repo
-for i in range (0, len(m)):
+for i in range (0, len(m[0])):
 	# POST /repos/:owner/:repo/forks
-	url = API_endpoint + '/repos/' + m[i][0] + '/' + m[i][1] + '/forks'
-	print('Forking '+ m[i][0] + '/' + m[i][1])
+	url = API_endpoint + '/repos/' + m[0][i][0] + '/' + m[0][i][1] + '/forks'
+	print('Forking '+ m[0][i][0] + '/' + m[0][i][1])
 	print(url)
 	f = r.request('post', url=url, params=params, auth=(cfg.credentials['user'], cfg.credentials['token']))
 	print(f.status_code)
